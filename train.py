@@ -18,7 +18,7 @@ data =  pd.read_csv("SQLInjection_XSS_CommandInjection_MixDataset.1.0.0.csv")
 df = pd.DataFrame(data)
 df['label'] = df[['SQLInjection', 'XSS', 'CommandInjection']].max(axis=1)
 
-vector = TfidfVectorizer(analyzer='char', ngram_range=(1, 3),max_features=5000)
+vector = TfidfVectorizer(analyzer='char',ngram_range=(1, 3), max_features=20000,lowercase=True)
 benign_urls = [
     "https://leetcode.com/problems/two-sum/",
     "https://www.linkedin.com/feed/",
@@ -37,7 +37,8 @@ df_final['Sentence'] = df_final['Sentence'].apply(expert_normalize)
 X = vector.fit_transform(df_final['Sentence'].values.astype('U'))
 Y = df_final['label']
 
-model = RandomForestClassifier(n_estimators=20, n_jobs=-1,verbose=1)
+model = RandomForestClassifier(n_estimators=100,n_jobs=-1,class_weight='balanced',verbose=1)
+print("Tranning Model...")
 model.fit(X,Y)
 
 test_payload = ["<svg/onload=alert(1)>"]
