@@ -24,7 +24,7 @@ if data:
     sample_vectors = vector.transform([input])
     probabilities = model.predict_proba(sample_vectors)[0]
     malicious_score = probabilities[1] 
-    if malicious_score > 0.90: 
+    if malicious_score > 0.58: 
         st.error(f"MALICIOUS (Confidence: {malicious_score:.2%})")
     else:
         st.success(f"CLEAN (Confidence: {1 - malicious_score:.2%})")
