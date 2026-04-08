@@ -14,7 +14,7 @@ def expert_normalize(text):
     return text.lower()
 
 
-data =  pd.read_csv("SQLInjection_XSS_CommandInjection_MixDataset.1.0.0.csv")
+data =  pd.read_csv("Dataset/SQLInjection_XSS_CommandInjection_MixDataset.1.0.0.csv")
 df = pd.DataFrame(data)
 df['label'] = df[['SQLInjection', 'XSS', 'CommandInjection']].max(axis=1)
 

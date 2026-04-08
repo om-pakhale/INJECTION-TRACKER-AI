@@ -14,8 +14,8 @@ def extract_threat_zone(data):
     return data.lower()
 
 
-model = joblib.load('full_injection_model.pkl')
-vector = joblib.load('full_vectorizer.pkl')
+model = joblib.load('Model/full_injection_model.pkl')
+vector = joblib.load('Model/full_vectorizer.pkl')
 
 st.header("INJECTION TRACKER")
 data = st.text_input("Enter your Url")
