@@ -10,19 +10,23 @@ def expert_normalize(text):
         return ""
     text = unquote(text).replace("+"," ")
     
-    if text.startswith(('http://', 'https://')):
-        parsed = urlparse(text)
-        text = parsed.path + "?" + parsed.query
-        
+    if text.startswith("https://"):
+        text = text[8:]
+    elif text.startswith("http://"):
+        text = text[7:]
+
     return text.lower()
 
 
-data =  pd.read_csv("SQLInjection_XSS_CommandInjection_MixDataset.1.0.0.csv")
+data =  pd.read_csv("balanced_urls.csv")
 df = pd.DataFrame(data)
-df['label'] = df[['SQLInjection', 'XSS', 'CommandInjection']].max(axis=1)
-df['Sentence']= df['Sentence'].apply(expert_normalize)
+df["Sentence"] = df["url"]
+df["target_label"] = (
+    pd.to_numeric(df["result"], errors="coerce").fillna(0).astype(int)
+)
+df["Sentence"] = df["Sentence"].apply(expert_normalize)
 X_train , X_test , Y_train , Y_test = train_test_split(
-    df['Sentence'], df['label'], random_state=42 , stratify=df['label']
+    df['Sentence'], df['target_label'],test_size=0.2, random_state=42 , stratify=df['target_label']
 )
 vector = TfidfVectorizer(analyzer='char',ngram_range=(1, 3), max_features=20000,lowercase=True)
 X_train_normal =  vector.fit_transform(X_train.values.astype('U'))
