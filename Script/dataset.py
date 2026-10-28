@@ -38,7 +38,7 @@ SOURCES = {
 def get_resilient_session():
     """Builds an HTTP session that automatically retries dropped connections."""
     session = requests.Session()
-    # Retry 5 times, backing off exponentially (1s, 2s, 4s, 8s) if the network drops
+
     retries = Retry(total=5, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
     session.mount('https://', HTTPAdapter(max_retries=retries))
     return session
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     balanced_dfs = []
     for label in df['label'].unique():
         label_df = df[df['label'] == label]
-        # Only sample up to what exists, to prevent crashing if a download still fails
+        
         sampled = label_df.sample(min(len(label_df), 5000), random_state=42)
         balanced_dfs.append(sampled)
         
